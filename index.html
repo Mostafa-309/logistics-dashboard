@@ -394,8 +394,7 @@ function renderDashboard(data) {
     }
   } catch (e) { console.error("Error rendering ordersType:", e); }
 
-  // 3. Order Status - حل نهائي للوضوح
-// 3. Order Status - بألوان متناسقة مع الداشبورد
+ // 3. Order Status - بألوان KPIs وأرقام داخل الشارت
 try {
   const statusData = charts.orderStatus || [];
   const hasData = statusData.some(d => d.value > 0);
@@ -403,16 +402,31 @@ try {
   if (hasData) {
     const totalOrders = statusData.reduce((sum, d) => sum + d.value, 0);
     
+    // ألوان من KPIs في الصورة
+    const chartColors = ['#16a34a', '#ef4444', '#6EADBC', '#2196F3'];
+    // Sold = أخضر غامق (مثل Total Margin)
+    // Returned = أحمر (مثل Total Cost)
+    // PD = تركواز فاتح (مثل Additional Fees)
+    // Not Available = أزرق (مثل Delivery Fees)
+    
     Plotly.react('orderStatus', [{
       type: 'pie',
       hole: 0.6,
       labels: statusData.map(d => d.name),
       values: statusData.map(d => d.value),
       marker: { 
-        colors: ['#36ADA3', '#4A4466', '#6EADBC', '#90CAF9'],  // ألوان متناسقة مع الداشبورد
+        colors: chartColors,
         line: { color: 'white', width: 3 }
       },
-      textinfo: 'none',
+      textinfo: 'percent',  // إظهار النسب المئوية
+      textposition: 'inside',  // داخل الشارت
+      textfont: { 
+        size: 16, 
+        color: 'white',
+        family: 'Inter, Arial',
+        weight: 'bold'
+      },
+      insidetextorientation: 'radial',
       hoverinfo: 'label+value+percent',
       hovertemplate: '<b>%{label}</b><br>Orders: %{value}<br>Percentage: %{percent}<extra></extra>',
       sort: false
