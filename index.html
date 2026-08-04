@@ -351,35 +351,67 @@ function renderDashboard(data) {
   const charts = data.charts;
 
   // 1. KPIs - محدث بالترتيب الجديد
-  try {
-    document.getElementById('kpiOrders').textContent = fmt.format(kpis.totalOrders);
-    document.getElementById('kpiOrdersSub').textContent = kpis.totalOrders ? `${kpis.successRate}% sold success rate` : 'No data';
-    
-    document.getElementById('kpiOnTimeOrders').textContent = fmt.format(kpis.onTimeOrders);
-    document.getElementById('kpiOnTime').textContent = kpis.onTimeRate + '%';
-    
-    document.getElementById('kpiLate').textContent = fmt.format(kpis.lateOrders);
-    document.getElementById('kpiLateRate').textContent = kpis.lateRate + '%';
-    
-    document.getElementById('kpiCouriers').textContent = fmt.format(kpis.activeCouriers);
-    
-    document.getElementById('kpiInventory').textContent = fmt.format(kpis.inventoryOrders);
-    document.getElementById('kpiConsignment').textContent = fmt.format(kpis.consignmentOrders);
-    document.getElementById('kpiOtherSuppliers').textContent = fmt.format(kpis.otherSuppliersOrders);
-    
-    document.getElementById('kpiGMV').textContent = '$' + money.format(kpis.totalGMV);
-    document.getElementById('kpiNMV').textContent = '$' + money.format(kpis.totalNMV);
-    document.getElementById('kpiNmvRate').textContent = kpis.nmvRate + '%';
-    
-    document.getElementById('kpiAvgOrders').textContent = kpis.avgOrdersPerCourier;
-    
-    document.getElementById('kpiDeliveryFees').textContent = '$' + money.format(kpis.totalDeliveryFees);
-    document.getElementById('kpiAdditionalFees').textContent = '$' + money.format(kpis.totalAdditionalFees);
-    document.getElementById('kpiServiceFees').textContent = '$' + money.format(kpis.totalServiceFees);
-    
-    document.getElementById('kpiMargin').textContent = '$' + money.format(kpis.totalMargin);
-    document.getElementById('kpiLogisticsCost').textContent = '$' + money.format(kpis.logisticsCost);
-  } catch (e) { console.error("Error updating KPIs:", e); }
+  // 3. Order Status - محسّن للوضوح
+try {
+  const statusData = charts.orderStatus || [];
+  const hasData = statusData.some(d => d.value > 0);
+  
+  if (hasData) {
+    Plotly.react('orderStatus', [{
+      type: 'pie',
+      hole: 0.5,
+      labels: statusData.map(d => d.name),
+      values: statusData.map(d => d.value),
+      marker: { 
+        colors: ['#16a34a', '#ef4444', '#f59e0b', '#64748b'],
+        line: { color: 'white', width: 2 }
+      },
+      textinfo: 'percent',
+      textposition: 'inside',
+      textfont: { 
+        size: 14, 
+        color: 'white',
+        family: 'Inter, Arial',
+        weight: 'bold'
+      },
+      insidetextorientation: 'radial',
+      hoverinfo: 'label+value+percent',
+      hovertemplate: '<b>%{label}</b><br>Orders: %{value}<br>Percentage: %{percent}<extra></extra>',
+      pull: [0.02, 0.02, 0.02, 0.02]
+    }], {
+      ...baseLayout,
+      showlegend: true,
+      legend: { 
+        orientation: 'h', 
+        y: -0.15,
+        x: 0.5,
+        xanchor: 'center',
+        font: { size: 12, family: 'Inter, Arial' },
+        itemsizing: 'constant'
+      },
+      margin: { t: 20, b: 60, l: 20, r: 20 },
+      annotations: [{
+        text: '<b>Total</b><br>' + fmt.format(statusData.reduce((sum, d) => sum + d.value, 0)),
+        showarrow: false,
+        font: { size: 16, color: '#121358', family: 'Inter, Arial' }
+      }]
+    }, config);
+  } else {
+    Plotly.react('orderStatus', [{ 
+      type: 'pie', 
+      values: [1], 
+      labels: ['No Data'], 
+      marker: { colors: ['#e2e8f0'] }, 
+      textinfo: 'label', 
+      hoverinfo: 'none' 
+    }], { 
+      ...baseLayout, 
+      showlegend: false, 
+      margin: { t: 20, b: 20, l: 20, r: 20 }, 
+      annotations: [{ text: 'No data for this date', showarrow: false, font: { size: 14, color: '#64748b' } }] 
+    }, config);
+  }
+} catch (e) { console.error("Error rendering orderStatus:", e); }
 
   // 2. Orders by Type
   try {
