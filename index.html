@@ -119,12 +119,55 @@
       </div>
     </div>
 
-    <!-- KPIs Grid (محدث ليشمل 16 مؤشر) -->
+    <!-- KPIs Grid - مرتبة حسب الترتيب المطلوب -->
     <div class="kpi-grid">
+      <!-- الصف الأول -->
       <div class="kpi-card">
         <div class="kpi-title">Total Orders</div>
         <div class="kpi-value" id="kpiOrders">-</div>
         <div class="kpi-sub" id="kpiOrdersSub">Loading...</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">On-Time Orders</div>
+        <div class="kpi-value" id="kpiOnTimeOrders" style="color:#121358;">-</div>
+        <div class="kpi-sub">Count</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">On-Time Delivery</div>
+        <div class="kpi-value" id="kpiOnTime" style="color:#121358;">-</div>
+        <div class="kpi-sub">Percentage</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Late Orders</div>
+        <div class="kpi-value" id="kpiLate" style="color:#4A4466;">-</div>
+        <div class="kpi-sub">Count</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Late Delivery</div>
+        <div class="kpi-value" id="kpiLateRate" style="color:#4A4466;">-</div>
+        <div class="kpi-sub">Percentage</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Active Couriers</div>
+        <div class="kpi-value" id="kpiCouriers" style="color:#36ADA3;">-</div>
+        <div class="kpi-sub">Unique IDs</div>
+      </div>
+      
+      <!-- الصف الثاني -->
+      <div class="kpi-card">
+        <div class="kpi-title">Inventory Orders</div>
+        <div class="kpi-value" id="kpiInventory" style="color:#2196F3;">-</div>
+        <div class="kpi-sub">Count</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Consignment Orders</div>
+        <div class="kpi-value" id="kpiConsignment" style="color:#36ADA3;">-</div>
+        <div class="kpi-sub">Count</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Trusted Suppliers</div>
+        <div class="kpi-value" id="kpiOtherSuppliers" style="color:#2F578A;">-</div>
+        <div class="kpi-sub">Count</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-title">Total GMV</div>
@@ -137,39 +180,16 @@
         <div class="kpi-sub">Net Revenue</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-title">On-Time Delivery</div>
-        <div class="kpi-value" id="kpiOnTime" style="color:#121358;">-</div>
-        <div class="kpi-sub">Percentage</div>
+        <div class="kpi-title">NMV Rate</div>
+        <div class="kpi-value" id="kpiNmvRate" style="color:#16a34a;">-</div>
+        <div class="kpi-sub">NMV / GMV %</div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Late Delivery</div>
-        <div class="kpi-value" id="kpiLateRate" style="color:#4A4466;">-</div>
-        <div class="kpi-sub">Percentage</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Late Orders</div>
-        <div class="kpi-value" id="kpiLate" style="color:#4A4466;">-</div>
-        <div class="kpi-sub">Count</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">On-Time Orders</div>
-        <div class="kpi-value" id="kpiOnTimeOrders" style="color:#121358;">-</div>
-        <div class="kpi-sub">Count</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Active Couriers</div>
-        <div class="kpi-value" id="kpiCouriers" style="color:#36ADA3;">-</div>
-        <div class="kpi-sub">Unique IDs</div>
-      </div>
+      
+      <!-- الصف الثالث -->
       <div class="kpi-card">
         <div class="kpi-title">AVG Orders/Courier</div>
         <div class="kpi-value" id="kpiAvgOrders" style="color:#2F578A;">-</div>
         <div class="kpi-sub">Avg Load</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Total Margin</div>
-        <div class="kpi-value" id="kpiMargin" style="color:#16a34a;">-</div>
-        <div class="kpi-sub">After Discounts</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-title">Delivery Fees</div>
@@ -187,19 +207,14 @@
         <div class="kpi-sub">Total</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-title">Inventory Orders</div>
-        <div class="kpi-value" id="kpiInventory" style="color:#2196F3;">-</div>
-        <div class="kpi-sub">Count</div>
+        <div class="kpi-title">Total Margin</div>
+        <div class="kpi-value" id="kpiMargin" style="color:#16a34a;">-</div>
+        <div class="kpi-sub">After Discounts</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-title">Consignment Orders</div>
-        <div class="kpi-value" id="kpiConsignment" style="color:#36ADA3;">-</div>
-        <div class="kpi-sub">Count</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Other Suppliers</div>
-        <div class="kpi-value" id="kpiOtherSuppliers" style="color:#2F578A;">-</div>
-        <div class="kpi-sub">Count</div>
+        <div class="kpi-title">Total Cost</div>
+        <div class="kpi-value" id="kpiLogisticsCost" style="color:#ef4444;">-</div>
+        <div class="kpi-sub">Logistics</div>
       </div>
     </div>
 
@@ -335,31 +350,35 @@ function renderDashboard(data) {
   const kpis = data.kpis;
   const charts = data.charts;
 
-  // 1. KPIs - محدث بالكامل ليشمل كل المؤشرات الجديدة
+  // 1. KPIs - محدث بالترتيب الجديد
   try {
     document.getElementById('kpiOrders').textContent = fmt.format(kpis.totalOrders);
     document.getElementById('kpiOrdersSub').textContent = kpis.totalOrders ? `${kpis.successRate}% sold success rate` : 'No data';
     
-    document.getElementById('kpiGMV').textContent = '$' + money.format(kpis.totalGMV);
-    document.getElementById('kpiNMV').textContent = '$' + money.format(kpis.totalNMV);
-    
+    document.getElementById('kpiOnTimeOrders').textContent = fmt.format(kpis.onTimeOrders);
     document.getElementById('kpiOnTime').textContent = kpis.onTimeRate + '%';
-    document.getElementById('kpiLateRate').textContent = kpis.lateRate + '%';
     
     document.getElementById('kpiLate').textContent = fmt.format(kpis.lateOrders);
-    document.getElementById('kpiOnTimeOrders').textContent = fmt.format(kpis.onTimeOrders);
+    document.getElementById('kpiLateRate').textContent = kpis.lateRate + '%';
     
     document.getElementById('kpiCouriers').textContent = fmt.format(kpis.activeCouriers);
-    document.getElementById('kpiAvgOrders').textContent = kpis.avgOrdersPerCourier;
-    
-    document.getElementById('kpiMargin').textContent = '$' + money.format(kpis.totalMargin);
-    document.getElementById('kpiDeliveryFees').textContent = '$' + money.format(kpis.totalDeliveryFees);
-    document.getElementById('kpiAdditionalFees').textContent = '$' + money.format(kpis.totalAdditionalFees);
-    document.getElementById('kpiServiceFees').textContent = '$' + money.format(kpis.totalServiceFees);
     
     document.getElementById('kpiInventory').textContent = fmt.format(kpis.inventoryOrders);
     document.getElementById('kpiConsignment').textContent = fmt.format(kpis.consignmentOrders);
     document.getElementById('kpiOtherSuppliers').textContent = fmt.format(kpis.otherSuppliersOrders);
+    
+    document.getElementById('kpiGMV').textContent = '$' + money.format(kpis.totalGMV);
+    document.getElementById('kpiNMV').textContent = '$' + money.format(kpis.totalNMV);
+    document.getElementById('kpiNmvRate').textContent = kpis.nmvRate + '%';
+    
+    document.getElementById('kpiAvgOrders').textContent = kpis.avgOrdersPerCourier;
+    
+    document.getElementById('kpiDeliveryFees').textContent = '$' + money.format(kpis.totalDeliveryFees);
+    document.getElementById('kpiAdditionalFees').textContent = '$' + money.format(kpis.totalAdditionalFees);
+    document.getElementById('kpiServiceFees').textContent = '$' + money.format(kpis.totalServiceFees);
+    
+    document.getElementById('kpiMargin').textContent = '$' + money.format(kpis.totalMargin);
+    document.getElementById('kpiLogisticsCost').textContent = '$' + money.format(kpis.logisticsCost);
   } catch (e) { console.error("Error updating KPIs:", e); }
 
   // 2. Orders by Type
