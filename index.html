@@ -124,7 +124,7 @@
       <!-- الصف الأول -->
       <div class="kpi-card">
         <div class="kpi-title">Total Orders</div>
-        <div class="kpi-value" id="kpiOrders">-</div>
+        <div class="kpi-value" id="kpiOrders" style="color:#2F578A;">-</div>
         <div class="kpi-sub" id="kpiOrdersSub">Loading...</div>
       </div>
       <div class="kpi-card">
@@ -171,7 +171,7 @@
       </div>
       <div class="kpi-card">
         <div class="kpi-title">Total GMV</div>
-        <div class="kpi-value" id="kpiGMV">-</div>
+        <div class="kpi-value" id="kpiGMV" style="color:#2F578A;">-</div>
         <div class="kpi-sub">Gross Revenue</div>
       </div>
       <div class="kpi-card">
@@ -403,7 +403,7 @@ try {
     const totalOrders = statusData.reduce((sum, d) => sum + d.value, 0);
     
     // ألوان من KPIs في الصورة
-    const chartColors = ['#16a34a', '#ef4444', '#6EADBC', '#2196F3'];
+    const chartColors = ['#9FCBAD', '#ef4444', '#6EADBC', '#2F578A'];
     // Sold = أخضر غامق (مثل Total Margin)
     // Returned = أحمر (مثل Total Cost)
     // PD = تركواز فاتح (مثل Additional Fees)
