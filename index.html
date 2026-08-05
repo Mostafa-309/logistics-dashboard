@@ -523,15 +523,19 @@ try {
     }
   } catch (e) { console.error("Error rendering supplierReliability:", e); }
 
-// 7. Area Return-Risk
+// 7. Area Return-Risk - مرتب حسب Return GMV
 try {
   if (charts.areaReturnRisk && charts.areaReturnRisk.length > 0) {
     const topAreas = charts.areaReturnRisk.slice(0, 15);
+    
     Plotly.react('areaRisk', [{
       type: 'bar', orientation: 'h',
       y: topAreas.map(d => d.name),
-      x: topAreas.map(d => parseFloat(d.return_rate)),
-      marker: { color: topAreas.map(d => parseFloat(d.return_rate) >= 30 ? colors.danger : parseFloat(d.return_rate) >= 15 ? colors.warning : colors.success) },
+      x: topAreas.map(d => parseFloat(d.return_rate)),  // المحور السيني يظل Return Rate %
+      marker: { 
+        color: topAreas.map(d => d.return_gmv >= 5000 ? colors.danger : d.return_gmv >= 2000 ? colors.warning : colors.success),
+        line: { color: 'white', width: 1 }
+      },
       customdata: topAreas.map(d => [d.return_qty, d.total_qty, d.return_gmv]),
       hovertemplate: '%{y}<br>Return rate: %{x:.1f}%<br>Return SKUs: %{customdata[0]} / Total SKUs: %{customdata[1]}<br>Return GMV: $%{customdata[2]:,.0f}<extra></extra>'
     }], { 
