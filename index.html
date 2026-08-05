@@ -511,38 +511,54 @@ try {
     }
   } catch (e) { console.error("Error rendering expressHour:", e); }
 
-  // 6. Supplier Reliability
-  try {
-    const supplierData = charts.supplierReliability || [];
-    if (supplierData.length > 0) {
-      const topSuppliers = supplierData.slice(0, 10);
-      const supplierNames = topSuppliers.map(d => d.name);
-      const supplierRates = topSuppliers.map(d => parseFloat(d.success_rate));
-      const supplierOrders = topSuppliers.map(d => d.orders);
-      
-      const barColors = supplierRates.map(rate => {
-        if (rate >= 90) return colors.success;
-        if (rate >= 80) return colors.primary;
-        if (rate >= 60) return colors.warning;
-        return colors.danger;
-      });
+  // 6. Supplier Reliability - بألوان محسّنة
+try {
+  const supplierData = charts.supplierReliability || [];
+  if (supplierData.length > 0) {
+    const topSuppliers = supplierData.slice(0, 10);
+    const supplierNames = topSuppliers.map(d => d.name);
+    const supplierRates = topSuppliers.map(d => parseFloat(d.success_rate));
+    const supplierOrders = topSuppliers.map(d => d.orders);
+    
+    // ️️ الألوان الجديدة
+    const barColors = supplierRates.map(rate => {
+      if (rate >= 90) return '#16a34a';      // أخضر - ممتاز
+      if (rate >= 80) return '#2F578A';     // كحلي غامق - جيد
+      return '#dc2626';                      // أحمر - يحتاج تحسين
+    });
 
-      Plotly.react('supplierReliability', [{
-        y: supplierNames, x: supplierRates, type: 'bar', orientation: 'h',
-        marker: { color: barColors, line: { color: 'rgba(0,0,0,0.1)', width: 1 } },
-        text: supplierRates.map(rate => rate + '%'), textposition: 'outside',
-        customdata: supplierOrders,
-        hovertemplate: '%{y}<br>Success Rate: %{x}%<br>Volume: %{customdata}<extra></extra>'
-      }], {
-        ...baseLayout,
-        xaxis: { title: 'Success Rate %', range: [0, 100], gridcolor: '#e6ebf2', zerolinecolor: '#2F578A', ticksuffix: '%' },
-        yaxis: { gridcolor: 'rgba(0,0,0,0)', zerolinecolor: 'rgba(0,0,0,0)', autorange: 'reversed' },
-        margin: { t: 20, b: 60, l: 120, r: 40 }, bargap: 0.3
-      }, config);
-    } else {
-      Plotly.react('supplierReliability', [{ type: 'bar', x: [0], y: ['No Data'], orientation: 'h', marker: { color: '#e2e8f0' }, hoverinfo: 'none' }], { ...baseLayout, xaxis: { visible: false }, yaxis: { visible: false }, margin: { t: 20, b: 20, l: 20, r: 20 }, annotations: [{ text: 'No data for this date', showarrow: false, font: { size: 14, color: '#64748b' } }] }, config);
-    }
-  } catch (e) { console.error("Error rendering supplierReliability:", e); }
+    Plotly.react('supplierReliability', [{
+      y: supplierNames, x: supplierRates, type: 'bar', orientation: 'h',
+      marker: { 
+        color: barColors, 
+        line: { color: 'white', width: 1 }
+      },
+      text: supplierRates.map(rate => rate + '%'), 
+      textposition: 'outside',
+      textfont: { size: 11, color: '#121358', weight: 'bold' },
+      customdata: supplierOrders,
+      hovertemplate: '<b>%{y}</b><br>Success Rate: %{x}%<br>Volume: %{customdata}<extra></extra>'
+    }], {
+      ...baseLayout,
+      xaxis: { 
+        title: 'Success Rate %', 
+        range: [0, 100], 
+        gridcolor: '#e6ebf2', 
+        zerolinecolor: '#2F578A', 
+        ticksuffix: '%' 
+      },
+      yaxis: { 
+        gridcolor: 'rgba(0,0,0,0)', 
+        zerolinecolor: 'rgba(0,0,0,0)', 
+        autorange: 'reversed' 
+      },
+      margin: { t: 20, b: 60, l: 120, r: 40 }, 
+      bargap: 0.3
+    }, config);
+  } else {
+    Plotly.react('supplierReliability', [{ type: 'bar', x: [0], y: ['No Data'], orientation: 'h', marker: { color: '#e2e8f0' }, hoverinfo: 'none' }], { ...baseLayout, xaxis: { visible: false }, yaxis: { visible: false }, margin: { t: 20, b: 20, l: 20, r: 20 }, annotations: [{ text: 'No data for this date', showarrow: false, font: { size: 14, color: '#64748b' } }] }, config);
+  }
+} catch (e) { console.error("Error rendering supplierReliability:", e); }
 
 // 7. Area Return-Risk - مرتب ومبني على Return GMV
 try {
