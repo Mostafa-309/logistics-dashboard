@@ -381,18 +381,39 @@ function renderDashboard(data) {
     document.getElementById('kpiLogisticsCost').textContent = '$' + money.format(kpis.logisticsCost);
   } catch (e) { console.error("Error updating KPIs:", e); }
 
-  // 2. Orders by Type
-  try {
-    if (charts.orderTypes && charts.orderTypes.length > 0) {
-      Plotly.react('ordersType', [{
-        type: 'bar', orientation: 'h',
-        y: charts.orderTypes.map(d => d.name),
-        x: charts.orderTypes.map(d => d.value),
-        marker: { color: [colors.primary, colors.teal, colors.warning] },
-        hovertemplate: '%{y}<br>Orders: %{x}<extra></extra>'
-      }], { ...baseLayout, margin: { l: 90, r: 20, t: 15, b: 35 }, xaxis: { title: 'Orders', gridcolor: '#90CAF9' }, yaxis: { autorange: 'reversed' } }, config);
-    }
-  } catch (e) { console.error("Error rendering ordersType:", e); }
+  // 2. Orders by Type - بألوان مخصصة لكل نوع
+try {
+  if (charts.orderTypes && charts.orderTypes.length > 0) {
+    
+    // دالة لتحديد اللون بناءً على اسم النوع
+    const getColor = (typeName) => {
+      const name = String(typeName).trim().toLowerCase();
+      if (name === 'scheduled') return '#2F578A';   // كحلي
+      if (name === 'express') return '#9FCBAD';     // أخضر فاتح
+      if (name === 'normal') return '#f28b82';      // أحمر فاتح (أفتح من #ef4444)
+      return '#90CAF9';                              // لون افتراضي
+    };
+    
+    Plotly.react('ordersType', [{
+      type: 'bar', orientation: 'h',
+      y: charts.orderTypes.map(d => d.name),
+      x: charts.orderTypes.map(d => d.value),
+      marker: { 
+        color: charts.orderTypes.map(d => getColor(d.name)),
+        line: { color: 'white', width: 1 }
+      },
+      text: charts.orderTypes.map(d => d.value),
+      textposition: 'outside',
+      textfont: { size: 12, color: '#121358', weight: 'bold' },
+      hovertemplate: '<b>%{y}</b><br>Orders: %{x}<extra></extra>'
+    }], { 
+      ...baseLayout, 
+      margin: { l: 90, r: 50, t: 15, b: 35 }, 
+      xaxis: { title: 'Orders', gridcolor: '#90CAF9' }, 
+      yaxis: { autorange: 'reversed' } 
+    }, config);
+  }
+} catch (e) { console.error("Error rendering ordersType:", e); }
 
  // 3. Order Status - بألوان KPIs وأرقام داخل الشارت
 try {
