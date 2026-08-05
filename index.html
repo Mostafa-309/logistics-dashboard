@@ -388,7 +388,7 @@ try {
     // دالة لتحديد اللون بناءً على اسم النوع
     const getColor = (typeName) => {
       const name = String(typeName).trim().toLowerCase();
-      if (name === 'scheduled') return '#2F578A';   // كحلي
+      if (name === 'scheduled') return '#6EADBC';   // كحلي
       if (name === 'express') return '#36ADA3';     // أخضر فاتح
       if (name === 'normal') return '#ef4444';      // أحمر فاتح (أفتح من #ef4444)
       return '#90CAF9';                              // لون افتراضي
@@ -535,7 +535,7 @@ try {
         hovertemplate: '%{y}<br>Success Rate: %{x}%<br>Volume: %{customdata}<extra></extra>'
       }], {
         ...baseLayout,
-        xaxis: { title: 'Success Rate %', range: [0, 100], gridcolor: '#e6ebf2', zerolinecolor: '#e6ebf2', ticksuffix: '%' },
+        xaxis: { title: 'Success Rate %', range: [0, 100], gridcolor: '#e6ebf2', zerolinecolor: '#2F578A', ticksuffix: '%' },
         yaxis: { gridcolor: 'rgba(0,0,0,0)', zerolinecolor: 'rgba(0,0,0,0)', autorange: 'reversed' },
         margin: { t: 20, b: 60, l: 120, r: 40 }, bargap: 0.3
       }, config);
