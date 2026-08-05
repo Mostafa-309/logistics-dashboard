@@ -389,8 +389,8 @@ try {
     const getColor = (typeName) => {
       const name = String(typeName).trim().toLowerCase();
       if (name === 'scheduled') return '#2F578A';   // كحلي
-      if (name === 'express') return '#9FCBAD';     // أخضر فاتح
-      if (name === 'normal') return '#f28b82';      // أحمر فاتح (أفتح من #ef4444)
+      if (name === 'express') return '#36ADA3';     // أخضر فاتح
+      if (name === 'normal') return '#ef4444';      // أحمر فاتح (أفتح من #ef4444)
       return '#90CAF9';                              // لون افتراضي
     };
     
@@ -554,7 +554,7 @@ try {
       y: topAreas.map(d => d.name),
       x: topAreas.map(d => d.return_gmv),  // ✅ المحور السيني = Return GMV
       marker: { 
-        color: topAreas.map(d => d.return_gmv >= 5000 ? '#ef4444' : d.return_gmv >= 2000 ? '#f59e0b' : '#16a34a'),
+        color: topAreas.map(d => d.return_gmv >= 5000 ? '#f28b82' : d.return_gmv >= 2000 ? '#6EADBC' : '#36ADA3'),
         line: { color: 'white', width: 1 }
       },
       customdata: topAreas.map(d => [d.return_qty, d.total_qty, d.return_rate, d.return_gmv]),
