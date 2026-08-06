@@ -119,7 +119,7 @@
       </div>
     </div>
 
-    <!-- KPIs Grid -->
+    <!-- KPIs Grid - الترتيب الجديد -->
     <div class="kpi-grid">
       <!-- الصف الأول -->
       <div class="kpi-card">
@@ -148,17 +148,12 @@
         <div class="kpi-sub">Percentage</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-title">Active Couriers</div>
-        <div class="kpi-value" id="kpiCouriers" style="color:#36ADA3;">-</div>
-        <div class="kpi-sub">Unique IDs</div>
-      </div>
-      
-      <!-- الصف الثاني -->
-      <div class="kpi-card">
         <div class="kpi-title">Inventory Orders</div>
         <div class="kpi-value" id="kpiInventory" style="color:#2196F3;">-</div>
         <div class="kpi-sub">Count</div>
       </div>
+      
+      <!-- الصف الثاني -->
       <div class="kpi-card">
         <div class="kpi-title">Consignment Orders</div>
         <div class="kpi-value" id="kpiConsignment" style="color:#36ADA3;">-</div>
@@ -184,8 +179,18 @@
         <div class="kpi-value" id="kpiNmvRate" style="color:#16a34a;">-</div>
         <div class="kpi-sub">NMV / GMV %</div>
       </div>
+      <div class="kpi-card">
+        <div class="kpi-title">AVG Ticket Size</div>
+        <div class="kpi-value" id="kpiAvgTicket" style="color:#2196F3;">-</div>
+        <div class="kpi-sub">Per Order</div>
+      </div>
       
       <!-- الصف الثالث -->
+      <div class="kpi-card">
+        <div class="kpi-title">Active Couriers</div>
+        <div class="kpi-value" id="kpiCouriers" style="color:#36ADA3;">-</div>
+        <div class="kpi-sub">Unique IDs</div>
+      </div>
       <div class="kpi-card">
         <div class="kpi-title">AVG Orders/Courier</div>
         <div class="kpi-value" id="kpiAvgOrders" style="color:#2F578A;">-</div>
@@ -207,14 +212,26 @@
         <div class="kpi-sub">Total</div>
       </div>
       <div class="kpi-card">
+        <div class="kpi-title">Total Cost</div>
+        <div class="kpi-value" id="kpiLogisticsCost" style="color:#ef4444;">-</div>
+        <div class="kpi-sub">Logistics</div>
+      </div>
+      
+      <!-- الصف الرابع -->
+      <div class="kpi-card">
+        <div class="kpi-title">AVG Cost Per Order</div>
+        <div class="kpi-value" id="kpiAvgCost" style="color:#ef4444;">-</div>
+        <div class="kpi-sub">Per Order</div>
+      </div>
+      <div class="kpi-card">
         <div class="kpi-title">Total Margin</div>
         <div class="kpi-value" id="kpiMargin" style="color:#16a34a;">-</div>
         <div class="kpi-sub">After Discounts</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-title">Total Cost</div>
-        <div class="kpi-value" id="kpiLogisticsCost" style="color:#ef4444;">-</div>
-        <div class="kpi-sub">Logistics</div>
+        <div class="kpi-title">Total Fees & Margin</div>
+        <div class="kpi-value" id="kpiTotalFeesMargin" style="color:#16a34a;">-</div>
+        <div class="kpi-sub">Combined</div>
       </div>
     </div>
 
@@ -350,7 +367,7 @@ function renderDashboard(data) {
   const kpis = data.kpis;
   const charts = data.charts;
 
-  // 1. KPIs
+  // 1. KPIs - محدث مع البوكسات الجديدة
   try {
     document.getElementById('kpiOrders').textContent = fmt.format(kpis.totalOrders);
     document.getElementById('kpiOrdersSub').textContent = kpis.totalOrders ? `${kpis.successRate}% sold success rate` : 'No data';
@@ -361,8 +378,6 @@ function renderDashboard(data) {
     document.getElementById('kpiLate').textContent = fmt.format(kpis.lateOrders);
     document.getElementById('kpiLateRate').textContent = kpis.lateRate + '%';
     
-    document.getElementById('kpiCouriers').textContent = fmt.format(kpis.activeCouriers);
-    
     document.getElementById('kpiInventory').textContent = fmt.format(kpis.inventoryOrders);
     document.getElementById('kpiConsignment').textContent = fmt.format(kpis.consignmentOrders);
     document.getElementById('kpiOtherSuppliers').textContent = fmt.format(kpis.otherSuppliersOrders);
@@ -371,121 +386,135 @@ function renderDashboard(data) {
     document.getElementById('kpiNMV').textContent = '$' + money.format(kpis.totalNMV);
     document.getElementById('kpiNmvRate').textContent = kpis.nmvRate + '%';
     
+    // ✅ AVG Ticket Size
+    const avgTicketSize = kpis.totalOrders > 0 ? kpis.totalGMV / kpis.totalOrders : 0;
+    document.getElementById('kpiAvgTicket').textContent = '$' + money.format(avgTicketSize);
+    
+    document.getElementById('kpiCouriers').textContent = fmt.format(kpis.activeCouriers);
     document.getElementById('kpiAvgOrders').textContent = kpis.avgOrdersPerCourier;
     
     document.getElementById('kpiDeliveryFees').textContent = '$' + money.format(kpis.totalDeliveryFees);
     document.getElementById('kpiAdditionalFees').textContent = '$' + money.format(kpis.totalAdditionalFees);
     document.getElementById('kpiServiceFees').textContent = '$' + money.format(kpis.totalServiceFees);
     
-    document.getElementById('kpiMargin').textContent = '$' + money.format(kpis.totalMargin);
     document.getElementById('kpiLogisticsCost').textContent = '$' + money.format(kpis.logisticsCost);
+    
+    // ✅ AVG Cost Per Order
+    const avgCostPerOrder = kpis.totalOrders > 0 ? kpis.logisticsCost / kpis.totalOrders : 0;
+    document.getElementById('kpiAvgCost').textContent = '$' + money.format(avgCostPerOrder);
+    
+    document.getElementById('kpiMargin').textContent = '$' + money.format(kpis.totalMargin);
+    
+    // ✅ Total Fees & Margin
+    const totalFeesMargin = kpis.totalMargin + kpis.totalDeliveryFees + kpis.totalAdditionalFees + kpis.totalServiceFees;
+    document.getElementById('kpiTotalFeesMargin').textContent = '$' + money.format(totalFeesMargin);
+    
   } catch (e) { console.error("Error updating KPIs:", e); }
 
-  // 2. Orders by Type - بألوان مخصصة لكل نوع
-try {
-  if (charts.orderTypes && charts.orderTypes.length > 0) {
-    
-    // دالة لتحديد اللون بناءً على اسم النوع
-    const getColor = (typeName) => {
-      const name = String(typeName).trim().toLowerCase();
-      if (name === 'scheduled') return '#6EADBC';   // كحلي
-      if (name === 'express') return '#36ADA3';     // أخضر فاتح
-      if (name === 'normal') return '#ef4444';      // أحمر فاتح (أفتح من #ef4444)
-      return '#90CAF9';                              // لون افتراضي
-    };
-    
-    Plotly.react('ordersType', [{
-      type: 'bar', orientation: 'h',
-      y: charts.orderTypes.map(d => d.name),
-      x: charts.orderTypes.map(d => d.value),
-      marker: { 
-        color: charts.orderTypes.map(d => getColor(d.name)),
-        line: { color: 'white', width: 1 }
-      },
-      text: charts.orderTypes.map(d => d.value),
-      textposition: 'outside',
-      textfont: { size: 12, color: '#121358', weight: 'bold' },
-      hovertemplate: '<b>%{y}</b><br>Orders: %{x}<extra></extra>'
-    }], { 
-      ...baseLayout, 
-      margin: { l: 90, r: 50, t: 15, b: 35 }, 
-      xaxis: { title: 'Orders', gridcolor: '#90CAF9' }, 
-      yaxis: { autorange: 'reversed' } 
-    }, config);
-  }
-} catch (e) { console.error("Error rendering ordersType:", e); }
+  // 2. Orders by Type
+  try {
+    if (charts.orderTypes && charts.orderTypes.length > 0) {
+      const getColor = (typeName) => {
+        const name = String(typeName).trim().toLowerCase();
+        if (name === 'scheduled') return '#6EADBC';
+        if (name === 'express') return '#36ADA3';
+        if (name === 'normal') return '#ef4444';
+        return '#90CAF9';
+      };
+      
+      Plotly.react('ordersType', [{
+        type: 'bar', orientation: 'h',
+        y: charts.orderTypes.map(d => d.name),
+        x: charts.orderTypes.map(d => d.value),
+        marker: { 
+          color: charts.orderTypes.map(d => getColor(d.name)),
+          line: { color: 'white', width: 1 }
+        },
+        text: charts.orderTypes.map(d => d.value),
+        textposition: 'outside',
+        textfont: { size: 12, color: '#121358', weight: 'bold' },
+        hovertemplate: '<b>%{y}</b><br>Orders: %{x}<extra></extra>'
+      }], { 
+        ...baseLayout, 
+        margin: { l: 90, r: 50, t: 15, b: 35 }, 
+        xaxis: { title: 'Orders', gridcolor: '#90CAF9' }, 
+        yaxis: { autorange: 'reversed' } 
+      }, config);
+    }
+  } catch (e) { console.error("Error rendering ordersType:", e); }
 
- // 3. Order Status - بألوان KPIs وأرقام داخل الشارت
-try {
-  const statusData = charts.orderStatus || [];
-  const hasData = statusData.some(d => d.value > 0);
-  
-  if (hasData) {
-    const totalOrders = statusData.reduce((sum, d) => sum + d.value, 0);
+  // 3. Order Status - تغيير "Returned" إلى "Undelivered"
+  try {
+    const statusData = charts.orderStatus || [];
+    const hasData = statusData.some(d => d.value > 0);
     
-    // ألوان من KPIs في الصورة
-    const chartColors = ['#9FCBAD', '#ef4444', '#6EADBC', '#2F578A'];
-    // Sold = أخضر غامق (مثل Total Margin)
-    // Returned = أحمر (مثل Total Cost)
-    // PD = تركواز فاتح (مثل Additional Fees)
-    // Not Available = أزرق (مثل Delivery Fees)
-    
-    Plotly.react('orderStatus', [{
-      type: 'pie',
-      hole: 0.6,
-      labels: statusData.map(d => d.name),
-      values: statusData.map(d => d.value),
-      marker: { 
-        colors: chartColors,
-        line: { color: 'white', width: 3 }
-      },
-      textinfo: 'percent',  // إظهار النسب المئوية
-      textposition: 'inside',  // داخل الشارت
-      textfont: { 
-        size: 16, 
-        color: 'white',
-        family: 'Inter, Arial',
-        weight: 'bold'
-      },
-      insidetextorientation: 'radial',
-      hoverinfo: 'label+value+percent',
-      hovertemplate: '<b>%{label}</b><br>Orders: %{value}<br>Percentage: %{percent}<extra></extra>',
-      sort: false
-    }], {
-      ...baseLayout,
-      showlegend: true,
-      legend: { 
-        orientation: 'h', 
-        y: -0.2,
-        x: 0.5,
-        xanchor: 'center',
-        font: { size: 13, family: 'Inter, Arial', color: '#121358' },
-        itemsizing: 'constant',
-        traceorder: 'normal'
-      },
-      margin: { t: 30, b: 80, l: 30, r: 30 },
-      annotations: [{
-        text: '<b>Total</b><br><span style="font-size:20px;color:#121358">' + fmt.format(totalOrders) + '</span>',
-        showarrow: false,
-        font: { size: 14, color: '#2F578A', family: 'Inter, Arial' }
-      }]
-    }, config);
-  } else {
-    Plotly.react('orderStatus', [{ 
-      type: 'pie', 
-      values: [1], 
-      labels: ['No Data'], 
-      marker: { colors: ['#e2e8f0'] }, 
-      textinfo: 'label', 
-      hoverinfo: 'none' 
-    }], { 
-      ...baseLayout, 
-      showlegend: false, 
-      margin: { t: 20, b: 20, l: 20, r: 20 }, 
-      annotations: [{ text: 'No data for this date', showarrow: false, font: { size: 14, color: '#64748b' } }] 
-    }, config);
-  }
-} catch (e) { console.error("Error rendering orderStatus:", e); }
+    if (hasData) {
+      const totalOrders = statusData.reduce((sum, d) => sum + d.value, 0);
+      
+      // تعديل labels: تغيير "Returned" إلى "Undelivered"
+      const modifiedLabels = statusData.map(d => {
+        if (d.name.toLowerCase() === 'returned') return 'Undelivered';
+        return d.name;
+      });
+      
+      const chartColors = ['#9FCBAD', '#ef4444', '#6EADBC', '#2F578A'];
+      
+      Plotly.react('orderStatus', [{
+        type: 'pie',
+        hole: 0.6,
+        labels: modifiedLabels,
+        values: statusData.map(d => d.value),
+        marker: { 
+          colors: chartColors,
+          line: { color: 'white', width: 3 }
+        },
+        textinfo: 'percent',
+        textposition: 'inside',
+        textfont: { 
+          size: 16, 
+          color: 'white',
+          family: 'Inter, Arial',
+          weight: 'bold'
+        },
+        insidetextorientation: 'radial',
+        hoverinfo: 'label+value+percent',
+        hovertemplate: '<b>%{label}</b><br>Orders: %{value}<br>Percentage: %{percent}<extra></extra>',
+        sort: false
+      }], {
+        ...baseLayout,
+        showlegend: true,
+        legend: { 
+          orientation: 'h', 
+          y: -0.2,
+          x: 0.5,
+          xanchor: 'center',
+          font: { size: 13, family: 'Inter, Arial', color: '#121358' },
+          itemsizing: 'constant',
+          traceorder: 'normal'
+        },
+        margin: { t: 30, b: 80, l: 30, r: 30 },
+        annotations: [{
+          text: '<b>Total</b><br><span style="font-size:20px;color:#121358">' + fmt.format(totalOrders) + '</span>',
+          showarrow: false,
+          font: { size: 14, color: '#2F578A', family: 'Inter, Arial' }
+        }]
+      }, config);
+    } else {
+      Plotly.react('orderStatus', [{ 
+        type: 'pie', 
+        values: [1], 
+        labels: ['No Data'], 
+        marker: { colors: ['#e2e8f0'] }, 
+        textinfo: 'label', 
+        hoverinfo: 'none' 
+      }], { 
+        ...baseLayout, 
+        showlegend: false, 
+        margin: { t: 20, b: 20, l: 20, r: 20 }, 
+        annotations: [{ text: 'No data for this date', showarrow: false, font: { size: 14, color: '#64748b' } }] 
+      }, config);
+    }
+  } catch (e) { console.error("Error rendering orderStatus:", e); }
 
   // 4. SLA Compliance
   try {
@@ -511,86 +540,85 @@ try {
     }
   } catch (e) { console.error("Error rendering expressHour:", e); }
 
-  // 6. Supplier Reliability - بألوان محسّنة
-try {
-  const supplierData = charts.supplierReliability || [];
-  if (supplierData.length > 0) {
-    const topSuppliers = supplierData.slice(0, 10);
-    const supplierNames = topSuppliers.map(d => d.name);
-    const supplierRates = topSuppliers.map(d => parseFloat(d.success_rate));
-    const supplierOrders = topSuppliers.map(d => d.orders);
-    
-    // ️️ الألوان الجديدة
-    const barColors = supplierRates.map(rate => {
-      if (rate >= 90) return '#16a34a';      // أخضر - ممتاز
-      if (rate >= 80) return '#2F578A';     // كحلي غامق - جيد
-      return '#dc2626';                      // أحمر - يحتاج تحسين
-    });
+  // 6. Supplier Reliability
+  try {
+    const supplierData = charts.supplierReliability || [];
+    if (supplierData.length > 0) {
+      const topSuppliers = supplierData.slice(0, 10);
+      const supplierNames = topSuppliers.map(d => d.name);
+      const supplierRates = topSuppliers.map(d => parseFloat(d.success_rate));
+      const supplierOrders = topSuppliers.map(d => d.orders);
+      
+      const barColors = supplierRates.map(rate => {
+        if (rate >= 90) return '#16a34a';
+        if (rate >= 80) return '#2F578A';
+        return '#dc2626';
+      });
 
-    Plotly.react('supplierReliability', [{
-      y: supplierNames, x: supplierRates, type: 'bar', orientation: 'h',
-      marker: { 
-        color: barColors, 
-        line: { color: 'white', width: 1 }
-      },
-      text: supplierRates.map(rate => rate + '%'), 
-      textposition: 'outside',
-      textfont: { size: 11, color: '#121358', weight: 'bold' },
-      customdata: supplierOrders,
-      hovertemplate: '<b>%{y}</b><br>Success Rate: %{x}%<br>Volume: %{customdata}<extra></extra>'
-    }], {
-      ...baseLayout,
-      xaxis: { 
-        title: 'Success Rate %', 
-        range: [0, 100], 
-        gridcolor: '#e6ebf2', 
-        zerolinecolor: '#2F578A', 
-        ticksuffix: '%' 
-      },
-      yaxis: { 
-        gridcolor: 'rgba(0,0,0,0)', 
-        zerolinecolor: 'rgba(0,0,0,0)', 
-        autorange: 'reversed' 
-      },
-      margin: { t: 20, b: 60, l: 120, r: 40 }, 
-      bargap: 0.3
-    }, config);
-  } else {
-    Plotly.react('supplierReliability', [{ type: 'bar', x: [0], y: ['No Data'], orientation: 'h', marker: { color: '#e2e8f0' }, hoverinfo: 'none' }], { ...baseLayout, xaxis: { visible: false }, yaxis: { visible: false }, margin: { t: 20, b: 20, l: 20, r: 20 }, annotations: [{ text: 'No data for this date', showarrow: false, font: { size: 14, color: '#64748b' } }] }, config);
-  }
-} catch (e) { console.error("Error rendering supplierReliability:", e); }
+      Plotly.react('supplierReliability', [{
+        y: supplierNames, x: supplierRates, type: 'bar', orientation: 'h',
+        marker: { 
+          color: barColors, 
+          line: { color: 'white', width: 1 }
+        },
+        text: supplierRates.map(rate => rate + '%'), 
+        textposition: 'outside',
+        textfont: { size: 11, color: '#121358', weight: 'bold' },
+        customdata: supplierOrders,
+        hovertemplate: '<b>%{y}</b><br>Success Rate: %{x}%<br>Volume: %{customdata}<extra></extra>'
+      }], {
+        ...baseLayout,
+        xaxis: { 
+          title: 'Success Rate %', 
+          range: [0, 100], 
+          gridcolor: '#e6ebf2', 
+          zerolinecolor: '#2F578A', 
+          ticksuffix: '%' 
+        },
+        yaxis: { 
+          gridcolor: 'rgba(0,0,0,0)', 
+          zerolinecolor: 'rgba(0,0,0,0)', 
+          autorange: 'reversed' 
+        },
+        margin: { t: 20, b: 60, l: 120, r: 40 }, 
+        bargap: 0.3
+      }, config);
+    } else {
+      Plotly.react('supplierReliability', [{ type: 'bar', x: [0], y: ['No Data'], orientation: 'h', marker: { color: '#e2e8f0' }, hoverinfo: 'none' }], { ...baseLayout, xaxis: { visible: false }, yaxis: { visible: false }, margin: { t: 20, b: 20, l: 20, r: 20 }, annotations: [{ text: 'No data for this date', showarrow: false, font: { size: 14, color: '#64748b' } }] }, config);
+    }
+  } catch (e) { console.error("Error rendering supplierReliability:", e); }
 
-// 7. Area Return-Risk - مرتب ومبني على Return GMV
-try {
-  if (charts.areaReturnRisk && charts.areaReturnRisk.length > 0) {
-    const topAreas = charts.areaReturnRisk.slice(0, 15);
-    
-    Plotly.react('areaRisk', [{
-      type: 'bar', orientation: 'h',
-      y: topAreas.map(d => d.name),
-      x: topAreas.map(d => d.return_gmv),  // ✅ المحور السيني = Return GMV
-      marker: { 
-        color: topAreas.map(d => d.return_gmv >= 5000 ? '#f28b82' : d.return_gmv >= 2000 ? '#6EADBC' : '#36ADA3'),
-        line: { color: 'white', width: 1 }
-      },
-      customdata: topAreas.map(d => [d.return_qty, d.total_qty, d.return_rate, d.return_gmv]),
-      hovertemplate: '%{y}<br>Return GMV: $%{x:,.0f}<br>Return Rate: %{customdata[2]:.1f}%<br>Return SKUs: %{customdata[0]} / Total SKUs: %{customdata[1]}<extra></extra>',
-      text: topAreas.map(d => '$' + (d.return_gmv / 1000).toFixed(1) + 'k'),
-      textposition: 'outside',
-      textfont: { size: 11, color: '#121358', weight: 'bold' }
-    }], { 
-      ...baseLayout, 
-      margin: { l: 190, r: 80, t: 15, b: 45 }, 
-      xaxis: { 
-        title: 'Return GMV ($)', 
-        gridcolor: '#90CAF9',
-        tickprefix: '$',
-        tickformat: ',.0f'
-      }, 
-      yaxis: { autorange: 'reversed', tickfont: { size: 10 } } 
-    }, config);
-  }
-} catch (e) { console.error("Error rendering areaRisk:", e); }
+  // 7. Area Return-Risk
+  try {
+    if (charts.areaReturnRisk && charts.areaReturnRisk.length > 0) {
+      const topAreas = charts.areaReturnRisk.slice(0, 15);
+      
+      Plotly.react('areaRisk', [{
+        type: 'bar', orientation: 'h',
+        y: topAreas.map(d => d.name),
+        x: topAreas.map(d => d.return_gmv),
+        marker: { 
+          color: topAreas.map(d => d.return_gmv >= 5000 ? '#f28b82' : d.return_gmv >= 2000 ? '#6EADBC' : '#36ADA3'),
+          line: { color: 'white', width: 1 }
+        },
+        customdata: topAreas.map(d => [d.return_qty, d.total_qty, d.return_rate, d.return_gmv]),
+        hovertemplate: '%{y}<br>Return GMV: $%{x:,.0f}<br>Return Rate: %{customdata[2]:.1f}%<br>Return SKUs: %{customdata[0]} / Total SKUs: %{customdata[1]}<extra></extra>',
+        text: topAreas.map(d => '$' + (d.return_gmv / 1000).toFixed(1) + 'k'),
+        textposition: 'outside',
+        textfont: { size: 11, color: '#121358', weight: 'bold' }
+      }], { 
+        ...baseLayout, 
+        margin: { l: 190, r: 80, t: 15, b: 45 }, 
+        xaxis: { 
+          title: 'Return GMV ($)', 
+          gridcolor: '#90CAF9',
+          tickprefix: '$',
+          tickformat: ',.0f'
+        }, 
+        yaxis: { autorange: 'reversed', tickfont: { size: 10 } } 
+      }, config);
+    }
+  } catch (e) { console.error("Error rendering areaRisk:", e); }
 
   // 8. Tables
   try {
@@ -635,14 +663,14 @@ function renderRushHourTable(rushData) {
   if (!tbody) return;
   tbody.innerHTML = `
     <tr style="background: linear-gradient(135deg, #FFF5F5, #FFE4E1); border-bottom: 2px solid #90CAF9; transition: background 0.2s;">
-      <td style="padding: 12px 15px; font-weight: 700; color: #4A4466;">● Rush Hour (Express)</td>
+      <td style="padding: 12px 15px; font-weight: 700; color: #4A4466;">● Rush Hour (Express + Normal)</td>
       <td style="padding: 12px 15px; text-align: center; font-weight: 700; color: #121358;">${fmt.format(rushData.rush.total)}</td>
       <td style="padding: 12px 15px; text-align: center; font-weight: 700; color: #121358;">${fmt.format(rushData.rush.late)}</td>
       <td style="padding: 12px 15px; text-align: center; color: #FF6B6B; font-weight: 700;">${rushData.rush.late_pct}%</td>
       <td style="padding: 12px 15px; text-align: center; color: #9FCBAD; font-weight: 700;">${(100 - rushData.rush.late_pct).toFixed(1)}%</td>
     </tr>
     <tr style="background: linear-gradient(135deg, #F0FFF4, #E6FFFA); transition: background 0.2s;">
-      <td style="padding: 12px 15px; font-weight: 700; color: #2F578A;">● Non-Rush (Express)</td>
+      <td style="padding: 12px 15px; font-weight: 700; color: #2F578A;">● Non-Rush (Express + Normal)</td>
       <td style="padding: 12px 15px; text-align: center; font-weight: 700; color: #121358;">${fmt.format(rushData.non_rush_express.total)}</td>
       <td style="padding: 12px 15px; text-align: center; font-weight: 700; color: #121358;">${fmt.format(rushData.non_rush_express.late)}</td>
       <td style="padding: 12px 15px; text-align: center; color: #FF6B6B;">${rushData.non_rush_express.late_pct}%</td>
